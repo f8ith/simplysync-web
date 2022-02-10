@@ -31,7 +31,7 @@ import {
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { useAuth } from "./Auth";
+import { useAuth } from "../hooks/useAuth";
 
 interface LinkItemProps {
   name: string;

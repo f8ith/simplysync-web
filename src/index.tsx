@@ -1,10 +1,10 @@
 import { ChakraProvider, ColorModeScript, theme } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { App } from "./components/App";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { App } from "./routes/App";
 import reportWebVitals from "./reportWebVitals";
-import Home from "./routes/Home";
+import ClassView from "./routes/ClassView";
 import Settings from "./routes/Settings";
 import Login from "./routes/Login";
 import * as serviceWorker from "./serviceWorker";
@@ -34,14 +34,21 @@ ReactDOM.render(
                 path="/"
                 element={
                   <RequireAuth>
-                    <AdminOnly>
-                      <App />
-                    </AdminOnly>
+                    <App />
                   </RequireAuth>
                 }
               >
-                <Route index element={<Home />} />
-                <Route path="settings" element={<Settings />} />
+                <Route
+                  path="admin"
+                  element={
+                    <AdminOnly>
+                      <Outlet />
+                    </AdminOnly>
+                  }
+                >
+                  <Route index element={<ClassView />} />
+                  <Route path="settings" element={<Settings />} />
+                </Route>
               </Route>
               <Route
                 path="/login"
@@ -50,15 +57,15 @@ ReactDOM.render(
                     <Login />
                   </NoAuth>
                 }
-              ></Route>
+              />
               <Route
-                path="/register"
+                path="/profile/edit"
                 element={
-                  <NoAuth>
+                  <RequireAuth>
                     <EditProfile />
-                  </NoAuth>
+                  </RequireAuth>
                 }
-              ></Route>
+              />
             </Routes>
           </AuthProvider>
         </Provider>

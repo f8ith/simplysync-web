@@ -1,5 +1,4 @@
-import React, { Fragment, ReactNode } from "react";
-import { Link as RouterLink, Navigate, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   IconButton,
   Box,
@@ -38,15 +37,11 @@ interface LinkItemProps {
   icon: IconType;
   link: string;
 }
-const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, link: "/" },
-  { name: "Settings", icon: FiSettings, link: "/settings" },
-];
-
 export default function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <Fragment>
+    <>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
@@ -66,7 +61,7 @@ export default function Sidebar() {
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-    </Fragment>
+    </>
   );
 }
 
@@ -75,6 +70,15 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const { user } = useAuth();
+  const LinkItems: Array<LinkItemProps> =
+    user.role === "admin"
+      ? [
+          { name: "View classes", icon: FiHome, link: "/admin" },
+          { name: "Settings", icon: FiSettings, link: "/admin/settings" },
+        ]
+      : [{ name: "Make a booking", icon: FiHome, link: "/book" }];
+
   return (
     <Box
       transition="3s ease"
@@ -189,7 +193,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               _focus={{ boxShadow: "none" }}
             >
               <HStack>
-                <Text fontSize="sm">{user}</Text>
+                <Text fontSize="sm">{user.name}</Text>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
                 </Box>

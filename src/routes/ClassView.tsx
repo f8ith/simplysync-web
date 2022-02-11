@@ -7,7 +7,7 @@ import BookingView from "../components/BookingView";
 import { Booking, ServiceOption, Service } from "../types/simplybook";
 import { BookingQuery } from "../urql/query";
 
-export default function Home() {
+export default function ClassView() {
   const selectRef =
     useRef<SelectInstance<ServiceOption, true, GroupBase<ServiceOption>>>(null);
   const [date, setDate] = useState<Date>(new Date());

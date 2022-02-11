@@ -13,29 +13,7 @@ import { useState } from "react";
 
 export default function Login() {
   const [error, setError] = useState(null);
-  const { gSignin } = useGoogleAuth();
-  const navigate = useNavigate();
-
-  const onSuccess = (gRes: any) => {
-    gSignin(gRes.tokenId, (res?: Response, err?: any) => {
-      if (err) setError(err);
-      if (res!.status == 201) navigate("/profile/edit");
-      else if (res!.status == 200) navigate("/");
-    });
-  };
-
-  const onFailure = (res: any) => {
-    throw res.error;
-  };
-
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID!;
-
-  const { signIn } = useGoogleLogin({
-    onSuccess,
-    onFailure,
-    clientId,
-    isSignedIn: true,
-  });
+  const { gSignIn } = useGoogleAuth();
 
   return (
     <Flex
@@ -62,7 +40,7 @@ export default function Login() {
                 bg: "blue.500",
               }}
               type="submit"
-              onClick={signIn}
+              onClick={gSignIn}
             >
               Sign in with Google
             </Button>

@@ -26,16 +26,18 @@ export const BookingQuery = `
             client_id
         }
     }
-`
+`;
 
 export const UpdateProfileQuery = `
-    mutation ($id: Int, $phone: string, $address: string) {
-        updateUser(where: {id: userId}, data:{phone: $phone, address: $address}) {
+    mutation ($id: Int, $phone: String, $address: String) {
+        updateUser(where: {id: $id}, data:{phone: {set: $phone}, address: {set: $address}}) {
             id
+            gId
             email
             name
             phone
             address
+            role
         }
     }
-`
+`;

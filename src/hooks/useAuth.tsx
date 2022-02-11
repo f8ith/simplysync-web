@@ -16,6 +16,7 @@ export const useAuth = () => {
     setUser,
     signout: (callback: () => void) => {
       window.localStorage.removeItem("Authorization");
+      window.localStorage.removeItem("User");
       setUser(null);
       callback();
     },
@@ -34,6 +35,7 @@ const CheckAuth = () => {
       return JSON.parse(window.localStorage.getItem("User")!);
   }
   window.localStorage.removeItem("Authorization");
+  window.localStorage.removeItem("User");
   return null;
 };
 

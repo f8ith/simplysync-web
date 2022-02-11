@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import {
   Flex,
   Box,
@@ -17,42 +17,37 @@ import { Field, Form, Formik } from "formik";
 import { useMutation } from "urql";
 import { UpdateProfileQuery } from "../urql/query";
 import { useAuth } from "../hooks/useAuth";
+import { useState } from "react";
 
 export default function EditProfile() {
-  const navigate = useNavigate();
-  const {user, setUser} = useAuth();
+  const { user, setUser } = useAuth();
+  const [editing, setEditing] = useState(true);
   const [updateProfileResult, updateProfile] = useMutation(UpdateProfileQuery);
+  const flexBg = useColorModeValue("gray.50", "gray.800");
+  const boxBg = useColorModeValue("white", "gray.700");
 
   const onSubmit = async (values: any, actions: any) => {
     try {
-      await updateProfile(values);
+      await updateProfile({ id: user.id, ...values });
       const { data } = updateProfileResult;
       if (data) {
-        window.localStorage.setItem("User", JSON.stringify(data));
-        setUser(data)
+        const userData = data.updateUser;
+        window.localStorage.setItem("User", JSON.stringify(userData));
+        setUser(userData);
+        setEditing(false);
       }
     } catch (err: any) {
       throw err;
     }
   };
 
-  return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
+  return editing ? (
+    <Flex minH={"100vh"} align={"center"} justify={"center"} bg={flexBg}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"}>Edit profile</Heading>
         </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}
-        >
+        <Box rounded={"lg"} bg={boxBg} boxShadow={"lg"} p={8}>
           <Formik
             initialValues={{ phone: "", address: "" }}
             onSubmit={onSubmit}
@@ -138,5 +133,7 @@ export default function EditProfile() {
         </Box>
       </Stack>
     </Flex>
+  ) : (
+    <Navigate to="/"></Navigate>
   );
 }

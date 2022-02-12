@@ -1,7 +1,3 @@
-import { useMemo } from "react";
-import { useQuery as useUrqlQuery } from "urql";
-import { useAuth } from "../components/Auth";
-
 export const BookingQuery = `
     query ($gte: DateTime, $gt: DateTime, $lte: DateTime, $lt: DateTime) {
         bookings(where: {start_datetime: {gte: $gte, gt: $gt, lte: $lte, lt: $lt}}) {
@@ -30,9 +26,18 @@ export const BookingQuery = `
             client_id
         }
     }
-`
+`;
 
-export const useQuery = ({ query, variables, ...args }: {query: string, variables: any}) => {
-    const {url} = useAuth()
-    return useUrqlQuery({query: query, ...args, context: useMemo(() => ({ url: url + "/graphql" }), [])}
-)}
+export const UpdateProfileQuery = `
+    mutation ($id: Int, $phone: String, $address: String) {
+        updateUser(where: {id: $id}, data:{phone: {set: $phone}, address: {set: $address}}) {
+            id
+            gId
+            email
+            name
+            phone
+            address
+            role
+        }
+    }
+`;

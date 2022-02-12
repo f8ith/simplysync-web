@@ -1,18 +1,20 @@
 import { ChakraProvider, ColorModeScript, theme } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { App } from "./components/App";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { App } from "./routes/App";
 import reportWebVitals from "./reportWebVitals";
-import Home from "./routes/home";
-import Settings from "./routes/settings";
-import Login from "./routes/login";
+import ClassView from "./routes/ClassView";
+import Settings from "./routes/Settings";
+import Login from "./routes/Login";
 import * as serviceWorker from "./serviceWorker";
-import { AuthProvider, NoAuth, RequireAuth } from "./components/Auth";
+import { AdminOnly, NoAuth, RequireAuth } from "./components/Auth";
+import { AuthProvider } from "./hooks/useAuth";
 import { createClient, Provider } from "urql";
+import EditProfile from "./routes/EditProfile";
 
 const client = createClient({
-  url: "http://localhost:4000/graphql",
+  url: process.env.REACT_APP_API_ENDPOINT! + "/graphql",
   fetchOptions: {
     headers: {
       Authorization: "Bearer " + window.localStorage.getItem("Authorization")!,
@@ -36,8 +38,17 @@ ReactDOM.render(
                   </RequireAuth>
                 }
               >
-                <Route index element={<Home />} />
-                <Route path="settings" element={<Settings />} />
+                <Route
+                  path="admin"
+                  element={
+                    <AdminOnly>
+                      <Outlet />
+                    </AdminOnly>
+                  }
+                >
+                  <Route index element={<ClassView />} />
+                  <Route path="settings" element={<Settings />} />
+                </Route>
               </Route>
               <Route
                 path="/login"
@@ -46,7 +57,15 @@ ReactDOM.render(
                     <Login />
                   </NoAuth>
                 }
-              ></Route>
+              />
+              <Route
+                path="/profile/edit"
+                element={
+                  <RequireAuth>
+                    <EditProfile />
+                  </RequireAuth>
+                }
+              />
             </Routes>
           </AuthProvider>
         </Provider>

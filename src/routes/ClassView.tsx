@@ -2,11 +2,12 @@ import { Flex, FormControl, FormLabel } from "@chakra-ui/react";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import { Select, GroupBase, SelectInstance } from "chakra-react-select";
 import { useRef, useState } from "react";
+import { useQuery } from "urql";
 import BookingView from "../components/BookingView";
 import { Booking, ServiceOption, Service } from "../types/simplybook";
-import { useQuery, BookingQuery } from "../urql/query";
+import { BookingQuery } from "../urql/query";
 
-export default function Home() {
+export default function ClassView() {
   const selectRef =
     useRef<SelectInstance<ServiceOption, true, GroupBase<ServiceOption>>>(null);
   const [date, setDate] = useState<Date>(new Date());

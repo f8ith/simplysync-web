@@ -26,6 +26,9 @@ import {
   FiMenu,
   FiBell,
   FiChevronDown,
+  FiEdit,
+  FiActivity,
+  FiCalendar,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -74,10 +77,20 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   const LinkItems: Array<LinkItemProps> =
     user.role === "admin"
       ? [
-          { name: "View classes", icon: FiHome, link: "/admin" },
+          { name: "View classes", icon: FiActivity, link: "/admin" },
+          {
+            name: "Create a class",
+            icon: FiEdit,
+            link: "/admin/create/servicetype",
+          },
+          {
+            name: "Schedule a class",
+            icon: FiCalendar,
+            link: "/admin/create/service",
+          },
           { name: "Settings", icon: FiSettings, link: "/admin/settings" },
         ]
-      : [{ name: "Make a booking", icon: FiHome, link: "/book" }];
+      : [{ name: "Make a booking", icon: FiCalendar, link: "/book" }];
 
   return (
     <Box
